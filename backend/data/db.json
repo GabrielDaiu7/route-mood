@@ -1,0 +1,606 @@
+{
+  "preferences": {
+    "demo-user": {
+      "favoriteMoods": [
+        "calm",
+        "focused"
+      ],
+      "defaultTransport": "walking",
+      "notificationsEnabled": false,
+      "updatedAt": "2026-05-07T15:04:21.512Z"
+    }
+  },
+  "feedback": [
+    {
+      "id": "fb-1001",
+      "userId": "website-demo",
+      "moodId": "calm",
+      "rating": 5,
+      "comment": "Very smooth and relaxed route",
+      "createdAt": "2026-05-07T08:20:00.000Z"
+    },
+    {
+      "id": "fb-1002",
+      "userId": "website-demo",
+      "moodId": "happy",
+      "rating": 4,
+      "comment": "Good vibe but a little busy",
+      "createdAt": "2026-05-07T09:35:00.000Z"
+    },
+    {
+      "id": "fb-1003",
+      "userId": "demo-user",
+      "moodId": "focused",
+      "rating": 5,
+      "comment": "Fast and consistent",
+      "createdAt": "2026-05-07T10:15:00.000Z"
+    },
+    {
+      "id": "fb-1004",
+      "userId": "guest-42",
+      "moodId": "energetic",
+      "rating": 4,
+      "comment": "Fun route with nice pace",
+      "createdAt": "2026-05-07T11:05:00.000Z"
+    },
+    {
+      "id": "fb-1005",
+      "userId": "guest-77",
+      "moodId": "stressed",
+      "rating": 2,
+      "comment": "Too many interruptions",
+      "createdAt": "2026-05-07T11:40:00.000Z"
+    }
+  ],
+  "routesHistory": [
+    {
+      "id": "rt-2001",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-07T07:55:00.000Z"
+    },
+    {
+      "id": "rt-2002",
+      "userId": "website-demo",
+      "from": "University of Tirana",
+      "to": "Grand Park, Tirana",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-07T08:45:00.000Z"
+    },
+    {
+      "id": "rt-2003",
+      "userId": "demo-user",
+      "from": "Pazari i Ri",
+      "to": "Blloku, Tirana",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T09:10:00.000Z"
+    },
+    {
+      "id": "rt-2004",
+      "userId": "guest-42",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Myslym Shyri",
+      "moodId": "happy",
+      "transport": "walking",
+      "createdAt": "2026-05-07T09:55:00.000Z"
+    },
+    {
+      "id": "rt-2005",
+      "userId": "demo-user",
+      "from": "Rruga e Durresit",
+      "to": "Mother Teresa Square",
+      "moodId": "focused",
+      "transport": "car",
+      "createdAt": "2026-05-07T10:05:00.000Z"
+    },
+    {
+      "id": "rt-2006",
+      "userId": "website-demo",
+      "from": "Komuna e Parisit",
+      "to": "Blloku, Tirana",
+      "moodId": "focused",
+      "transport": "bike",
+      "createdAt": "2026-05-07T10:35:00.000Z"
+    },
+    {
+      "id": "rt-2007",
+      "userId": "guest-77",
+      "from": "Kinostudio",
+      "to": "Qender, Tirana",
+      "moodId": "energetic",
+      "transport": "transit",
+      "createdAt": "2026-05-07T11:00:00.000Z"
+    },
+    {
+      "id": "rt-2008",
+      "userId": "guest-42",
+      "from": "Ali Demi",
+      "to": "Blloku, Tirana",
+      "moodId": "energetic",
+      "transport": "bike",
+      "createdAt": "2026-05-07T11:25:00.000Z"
+    },
+    {
+      "id": "rt-2009",
+      "userId": "guest-77",
+      "from": "Qender, Tirana",
+      "to": "Liqeni i Thate",
+      "moodId": "stressed",
+      "transport": "car",
+      "createdAt": "2026-05-07T11:45:00.000Z"
+    },
+    {
+      "id": "rt-2010",
+      "userId": "website-demo",
+      "from": "Stacioni i Trenit",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "transit",
+      "createdAt": "2026-05-07T12:00:00.000Z"
+    },
+    {
+      "id": "475ec5a6-429d-40ed-b134-b25460401a78",
+      "userId": "website-demo",
+      "from": "A",
+      "to": "B",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-07T16:27:45.766Z"
+    },
+    {
+      "id": "894d8876-6ba2-428f-ae01-3c36efce0fad",
+      "userId": "website-demo",
+      "from": "41.32210, 19.81850",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-07T16:28:04.317Z"
+    },
+    {
+      "id": "00f2894b-6c50-4129-a418-5cef19a0980f",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-07T16:28:11.629Z"
+    },
+    {
+      "id": "46c1ca0a-325c-420b-9e9d-9384c9a18f39",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:28:22.789Z"
+    },
+    {
+      "id": "5fa313c3-3e8c-4c7e-a27b-d10c4653b8fa",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:28:28.659Z"
+    },
+    {
+      "id": "e1dfdb86-a80a-4116-a8ba-8bbb186e58eb",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:28:31.052Z"
+    },
+    {
+      "id": "737f5912-dd0e-4601-b9bd-5f559e3d79c3",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:32:02.596Z"
+    },
+    {
+      "id": "39a5c492-abc8-4c0d-8066-a68675d544bf",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:33:20.588Z"
+    },
+    {
+      "id": "5a1a0791-08a6-41eb-aba1-d44b9ab90190",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:34:57.589Z"
+    },
+    {
+      "id": "5f8bf845-2a85-4c75-a404-dd3dc5c6a7a5",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:35:51.587Z"
+    },
+    {
+      "id": "5431259f-4069-4709-82f8-e4e7cff9f881",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:36:17.588Z"
+    },
+    {
+      "id": "dcf6fe68-41db-44e8-a18c-6b271d4318c5",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:36:50.596Z"
+    },
+    {
+      "id": "5d6d0232-a912-4ee6-9c0c-9d409835b59c",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:38:27.386Z"
+    },
+    {
+      "id": "a3bf607b-09bb-459f-b619-ad5eae14c609",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:38:34.062Z"
+    },
+    {
+      "id": "83d18326-726b-48d1-97b8-5f2e5df395cf",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:38:37.243Z"
+    },
+    {
+      "id": "4af6450d-2907-41ad-b1e0-43ad28a216a4",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:40:19.864Z"
+    },
+    {
+      "id": "f181c818-ed74-4497-ab18-a8690841f9ba",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:42:15.464Z"
+    },
+    {
+      "id": "bc530517-8fee-43e5-aed0-26fc541d8108",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:44:18.217Z"
+    },
+    {
+      "id": "e4577c5f-6718-46d9-a50c-e142a92a8109",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:46:38.890Z"
+    },
+    {
+      "id": "e88756e8-2b0a-4f9b-9511-09f1e1a35053",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "calm",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:47:03.456Z"
+    },
+    {
+      "id": "a40fa5aa-9c03-49b9-8d0d-e244779f88d0",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:47:17.419Z"
+    },
+    {
+      "id": "c8367581-b346-4dab-8a36-5f014ef23141",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:49:39.540Z"
+    },
+    {
+      "id": "d2a74d33-dab5-4659-a6b2-d574bf7a268a",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "focused",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:49:42.633Z"
+    },
+    {
+      "id": "d3dc5714-b996-4288-a32b-7b41b43813d9",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "focused",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:51:43.950Z"
+    },
+    {
+      "id": "dd745503-e210-429a-b788-722aa4649e04",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "happy",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:51:51.993Z"
+    },
+    {
+      "id": "c479145d-fabb-457d-98e0-f54b6e0b43f8",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "energetic",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:51:54.134Z"
+    },
+    {
+      "id": "d5d4c996-304e-4131-acd6-a70470fffc15",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:51:58.026Z"
+    },
+    {
+      "id": "35ac1ecd-31f7-4fea-8ebb-62871858614f",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:53:52.736Z"
+    },
+    {
+      "id": "1f7c7b97-84f2-4d40-9d54-a288eb4790b7",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:54:59.793Z"
+    },
+    {
+      "id": "61ccc2e7-0f7a-4315-a9b1-4a2b49373ce6",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:56:33.039Z"
+    },
+    {
+      "id": "a198eac0-b481-4b34-987b-4517412c3d01",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:57:39.244Z"
+    },
+    {
+      "id": "f9d4d42c-de9c-49ba-9e0c-973dc258dd7b",
+      "userId": "website-demo",
+      "from": "41.32212, 19.81854",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:59:00.804Z"
+    },
+    {
+      "id": "1cddcc5f-974f-4525-b2f0-3aa38f493ab1",
+      "userId": "website-demo",
+      "from": "41.32212, 19.8185",
+      "to": "41.33129, 19.81758",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T16:59:03.922Z"
+    },
+    {
+      "id": "c20762d7-cf3e-49b5-80e5-df4883bec00c",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T17:00:00.342Z"
+    },
+    {
+      "id": "bad7866d-a4b5-479c-bcea-4532a61a6782",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T17:01:18.596Z"
+    },
+    {
+      "id": "f2a1282e-7c34-4b80-b601-1276638ad134",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T17:02:52.585Z"
+    },
+    {
+      "id": "c7f9f247-8c74-4122-8ad4-ebcd20940b23",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "bike",
+      "createdAt": "2026-05-07T17:03:19.889Z"
+    },
+    {
+      "id": "303b3e12-65fb-48be-afe1-5bf633397924",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Blloku, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:03:29.403Z"
+    },
+    {
+      "id": "fd87cc8b-7902-4409-aee6-b24b17eb4c2c",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Air Albania Stadium, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:03:34.938Z"
+    },
+    {
+      "id": "1a1d2ad7-8158-445f-8711-b9a158c015f9",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Air Albania Stadium, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:03:35.936Z"
+    },
+    {
+      "id": "27d78012-1248-4f2a-948f-d1b4d877e280",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Air Albania Stadium, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:03:37.448Z"
+    },
+    {
+      "id": "d3a27a3a-f2c3-4783-9be4-f9a6a0f881c0",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Air Albania Stadium, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:05:07.351Z"
+    },
+    {
+      "id": "2d0d9d33-6e2e-4e2f-a5e9-9bc6c3bb1558",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Air Albania Stadium, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:16.336Z"
+    },
+    {
+      "id": "7273d28f-442f-40dc-ab01-3ee4f357ba2a",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Skanderbeg Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:19.708Z"
+    },
+    {
+      "id": "e957d870-adf7-4648-b64b-189d957b43cf",
+      "userId": "website-demo",
+      "from": "Skanderbeg Square, Tirana",
+      "to": "Mother Teresa Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:22.411Z"
+    },
+    {
+      "id": "a5984624-dfec-471f-a23a-42a7f24173eb",
+      "userId": "website-demo",
+      "from": "Air Albania Stadium, Tirana",
+      "to": "Mother Teresa Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:26.123Z"
+    },
+    {
+      "id": "3b26235f-df83-49cd-a87b-ff6f8e5b1319",
+      "userId": "website-demo",
+      "from": "Air Albania Stadium, Tirana",
+      "to": "Mother Teresa Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:27.110Z"
+    },
+    {
+      "id": "2c7dbf53-ecb9-4188-a7bc-35879dc6c1d1",
+      "userId": "website-demo",
+      "from": "Air Albania Stadium, Tirana",
+      "to": "Mother Teresa Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:27.726Z"
+    },
+    {
+      "id": "18c7a3be-8e46-4dd0-b2d2-7b6df2c70b95",
+      "userId": "website-demo",
+      "from": "Pazari i Ri, Tirana",
+      "to": "Mother Teresa Square, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:44.315Z"
+    },
+    {
+      "id": "7a25317b-6f74-48f7-811c-7b598bc73cad",
+      "userId": "website-demo",
+      "from": "Pazari i Ri, Tirana",
+      "to": "Pyramid of Tirana, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:48.075Z"
+    },
+    {
+      "id": "a66320cf-2063-4c96-904e-a3a47844bf51",
+      "userId": "website-demo",
+      "from": "Pazari i Ri, Tirana",
+      "to": "Pyramid of Tirana, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:06:48.966Z"
+    }
+  ]
+}
