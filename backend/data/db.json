@@ -601,6 +601,33 @@
       "moodId": "stressed",
       "transport": "walking",
       "createdAt": "2026-05-07T17:06:48.966Z"
+    },
+    {
+      "id": "65da3610-2f1b-4be7-afb6-772a18b9941b",
+      "userId": "website-demo",
+      "from": "Pazari i Ri, Tirana",
+      "to": "Pyramid of Tirana, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:09:32.142Z"
+    },
+    {
+      "id": "25361a96-9823-4e60-bbf8-656e1ed0e933",
+      "userId": "website-demo",
+      "from": "Toptani Shopping Center, Tirana",
+      "to": "Pyramid of Tirana, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:09:37.029Z"
+    },
+    {
+      "id": "3e0028ce-9e45-4995-ae32-17470074c838",
+      "userId": "website-demo",
+      "from": "Toptani Shopping Center, Tirana",
+      "to": "Pazari i Ri, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-07T17:09:41.550Z"
     }
   ]
 }

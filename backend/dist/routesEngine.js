@@ -6,6 +6,70 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMoodById = getMoodById;
 exports.generateSuggestions = generateSuggestions;
 const moods_1 = __importDefault(require("./moods"));
+const tiranaPlaces_1 = require("./tiranaPlaces");
+function midpoint(a, b, latOffset = 0, lngOffset = 0) {
+    return [((a[0] + b[0]) / 2) + latOffset, ((a[1] + b[1]) / 2) + lngOffset];
+}
+function routeCoordsBetweenPlaces(fromPlace, toPlace, moodId, routeKind) {
+    if (!fromPlace || !toPlace) {
+        return routeCoordsForMood(moodId, routeKind);
+    }
+    const moodBias = {
+        calm: [0.0018, -0.0012],
+        happy: [0.0011, 0.0015],
+        focused: [0.0003, 0.0002],
+        energetic: [0.002, 0.0018],
+        stressed: [-0.0014, -0.0008]
+    };
+    const kindBias = {
+        balanced: [0.0006, 0.0004],
+        scenic: [0.0017, 0.0012],
+        fastest: [0.0001, 0.0001]
+    };
+    const baseMood = moodBias[moodId] || [0.001, 0.001];
+    const baseKind = kindBias[routeKind];
+    const bendOne = midpoint(fromPlace.coords, toPlace.coords, baseMood[0] + baseKind[0], baseMood[1] + baseKind[1]);
+    const bendTwo = midpoint(fromPlace.coords, toPlace.coords, -(baseKind[0] / 2), baseMood[1] - baseKind[1]);
+    if (routeKind === "fastest") {
+        return [fromPlace.coords, midpoint(fromPlace.coords, toPlace.coords, baseKind[0], baseKind[1]), toPlace.coords];
+    }
+    if (routeKind === "balanced") {
+        return [fromPlace.coords, bendOne, bendTwo, toPlace.coords];
+    }
+    return [fromPlace.coords, bendOne, midpoint(bendOne, bendTwo, baseKind[0], -baseKind[1]), bendTwo, toPlace.coords];
+}
+function streetStepsBetweenPlaces(fromPlace, toPlace, variant) {
+    if (!fromPlace || !toPlace) {
+        return variant.streetSteps;
+    }
+    const moodLineByKind = {
+        balanced: "Follow the mood-balanced city line between the two areas.",
+        scenic: "Stay on the more scenic corridor between the two areas.",
+        fastest: "Keep to the direct connector for the quickest route."
+    };
+    return [
+        {
+            title: `Start on ${fromPlace.street}`,
+            detail: `Leave ${fromPlace.name} and head out through ${fromPlace.area}.`,
+            icon: "start"
+        },
+        {
+            title: `Continue via ${variant.routeKind === "scenic" ? "Bulevardi Deshmoret e Kombit" : "Bulevardi Bajram Curri"}`,
+            detail: moodLineByKind[variant.routeKind],
+            icon: "straight"
+        },
+        {
+            title: `Join ${toPlace.street}`,
+            detail: `Approach ${toPlace.name} through ${toPlace.area}.`,
+            icon: "straight"
+        },
+        {
+            title: `Arrive at ${toPlace.name}`,
+            detail: `Finish the route near ${toPlace.street}.`,
+            icon: "arrive"
+        }
+    ];
+}
 function getMoodById(moodId) {
     return moods_1.default.find((m) => m.id === moodId);
 }
@@ -293,7 +357,12 @@ function routeVariantsForMood(moodId, moodLabel, routeStyle) {
             description: `A route optimized for ${routeStyle}.`,
             routeKind: "balanced",
             confidence: 0.85,
-            tags: ["mood-match"]
+            tags: ["mood-match"],
+            streetSteps: [
+                { title: "Start route", detail: "Join the balanced route from the origin area.", icon: "start" },
+                { title: "Continue forward", detail: "Stay on the central route corridor.", icon: "straight" },
+                { title: "Arrive", detail: "Finish inside the destination area.", icon: "arrive" }
+            ]
         },
         {
             id: `${moodId}-scenic`,
@@ -301,7 +370,12 @@ function routeVariantsForMood(moodId, moodLabel, routeStyle) {
             description: "A scenic option with more atmosphere and comfort.",
             routeKind: "scenic",
             confidence: 0.8,
-            tags: ["scenic"]
+            tags: ["scenic"],
+            streetSteps: [
+                { title: "Start route", detail: "Join the scenic route from the origin area.", icon: "start" },
+                { title: "Continue through the scenic corridor", detail: "Stay on the softer, more atmospheric path.", icon: "straight" },
+                { title: "Arrive", detail: "Finish inside the destination area.", icon: "arrive" }
+            ]
         },
         {
             id: `${moodId}-fastest`,
@@ -309,7 +383,12 @@ function routeVariantsForMood(moodId, moodLabel, routeStyle) {
             description: "A quicker option with a stronger ETA focus.",
             routeKind: "fastest",
             confidence: 0.8,
-            tags: ["efficient"]
+            tags: ["efficient"],
+            streetSteps: [
+                { title: "Start route", detail: "Join the direct route from the origin area.", icon: "start" },
+                { title: "Continue on the direct line", detail: "Hold the shortest path toward the destination.", icon: "straight" },
+                { title: "Arrive", detail: "Finish inside the destination area.", icon: "arrive" }
+            ]
         }
     ];
 }
@@ -317,6 +396,8 @@ function generateSuggestions({ from, to, moodId, transport, avoid }) {
     const mood = getMoodById(moodId);
     if (!mood)
         return [];
+    const fromPlace = (0, tiranaPlaces_1.getTiranaPlace)(from);
+    const toPlace = (0, tiranaPlaces_1.getTiranaPlace)(to);
     const firstDuration = estimateDurationMinutes(transport, moodId);
     const secondDuration = firstDuration + 5;
     const thirdDuration = Math.max(10, firstDuration - 3);
@@ -337,8 +418,8 @@ function generateSuggestions({ from, to, moodId, transport, avoid }) {
         etaMinutes: durationByKind[variant.routeKind],
         stressScore: stressByKind[variant.routeKind],
         confidence: variant.confidence,
-        routeCoords: routeCoordsForMood(moodId, variant.routeKind),
-        streetSteps: variant.streetSteps,
+        routeCoords: routeCoordsBetweenPlaces(fromPlace, toPlace, moodId, variant.routeKind),
+        streetSteps: streetStepsBetweenPlaces(fromPlace, toPlace, variant),
         routeKind: variant.routeKind,
         tags: variant.tags,
         googleMapsUrl: buildGoogleMapsLink(from, to, transport)
