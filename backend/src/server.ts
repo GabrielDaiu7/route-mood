@@ -1,15 +1,60 @@
+import "dotenv/config";
 import cors from "cors";
 import express, { type Request, type Response } from "express";
 import { randomUUID } from "node:crypto";
-import { readDb, writeDb, type Preference } from "./dataStore";
+import { loginHandler, logoutHandler, meHandler, registerHandler } from "./auth";
 import moods from "./moods";
-import { generateSuggestions } from "./routesEngine";
+import {
+  getPreferences,
+  getRecentMoodSignals,
+  getStats,
+  initializePostgres,
+  insertFeedback,
+  insertRouteHistory,
+  type Preference,
+  upsertPreferences
+} from "./postgres";
+import { generateSuggestions, getMoodById } from "./routesEngine";
+import { getGoogleRoute } from "./googleRouting";
+import { findSpotifyPlaylist } from "./spotify";
+import { sendWaitlistEmail } from "./waitlistEmail";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
+const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173,http://127.0.0.1:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedTransports = new Set(["walking", "bike", "car", "transit"]);
+const requestBuckets = new Map<string, { count: number; resetAt: number }>();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Origin is not allowed by CORS."));
+  }
+}));
+app.use(express.json({ limit: "64kb" }));
+
+app.use((req: Request, res: Response, next) => {
+  const key = `${req.ip}:${req.path}`;
+  const now = Date.now();
+  const windowMs = 60_000;
+  const limit = req.path.startsWith("/api/auth") ? 20 : 90;
+  const bucket = requestBuckets.get(key);
+
+  if (!bucket || bucket.resetAt <= now) {
+    requestBuckets.set(key, { count: 1, resetAt: now + windowMs });
+    return next();
+  }
+
+  bucket.count += 1;
+  if (bucket.count > limit) {
+    return res.status(429).json({ error: "Too many requests. Please try again in a minute." });
+  }
+
+  return next();
+});
 
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ ok: true, service: "route-mood-api" });
@@ -19,7 +64,63 @@ app.get("/api/moods", (_req: Request, res: Response) => {
   res.json({ moods });
 });
 
-app.post("/api/route-suggestions", (req: Request, res: Response) => {
+app.get("/api/playlist", async (req: Request, res: Response) => {
+  const moodId = String(req.query.moodId || "");
+  const query = String(req.query.q || "");
+  const mood = moodId ? getMoodById(moodId) : undefined;
+  const searchQuery = query || mood?.musicKeywords || "mood playlist";
+
+  res.json({ playlist: await findSpotifyPlaylist(searchQuery) });
+});
+
+app.post("/api/waitlist", async (req: Request, res: Response) => {
+  const name = String(req.body?.name || "").trim();
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  const message = String(req.body?.message || "").trim();
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "name, email and message are required." });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: "Enter a valid email address." });
+  }
+  if (message.length > 2000) {
+    return res.status(400).json({ error: "Message must be 2000 characters or fewer." });
+  }
+
+  const result = await sendWaitlistEmail({ name, email, message });
+  return res.status(result.sent ? 201 : 202).json(result);
+});
+
+app.post("/api/auth/register", (req: Request, res: Response) => {
+  registerHandler(req, res).catch((error: unknown) => {
+    console.error("register failed", error);
+    res.status(500).json({ error: "Could not register user." });
+  });
+});
+
+app.post("/api/auth/login", (req: Request, res: Response) => {
+  loginHandler(req, res).catch((error: unknown) => {
+    console.error("login failed", error);
+    res.status(500).json({ error: "Could not log in." });
+  });
+});
+
+app.get("/api/auth/me", (req: Request, res: Response) => {
+  meHandler(req, res).catch((error: unknown) => {
+    console.error("auth me failed", error);
+    res.status(500).json({ error: "Could not verify session." });
+  });
+});
+
+app.post("/api/auth/logout", (req: Request, res: Response) => {
+  logoutHandler(req, res).catch((error: unknown) => {
+    console.error("logout failed", error);
+    res.status(500).json({ error: "Could not log out." });
+  });
+});
+
+app.post("/api/route-suggestions", async (req: Request, res: Response) => {
   const { userId = "guest", from, to, moodId, transport = "walking", avoid } = req.body as {
     userId?: string;
     from?: string;
@@ -36,11 +137,27 @@ app.post("/api/route-suggestions", (req: Request, res: Response) => {
   if (!from || !to || !moodId) {
     return res.status(400).json({ error: "from, to and moodId are required." });
   }
+  if (!getMoodById(moodId)) {
+    return res.status(400).json({ error: "Unknown moodId." });
+  }
+  if (!allowedTransports.has(transport)) {
+    return res.status(400).json({ error: "Unsupported transport mode." });
+  }
 
-  const suggestions = generateSuggestions({ from, to, moodId, transport, avoid });
-  const db = readDb();
-
-  db.routesHistory.push({
+  let suggestions = generateSuggestions({ from, to, moodId, transport, avoid });
+  const googleRoute = await getGoogleRoute({ from, to, transport });
+  if (googleRoute) {
+    suggestions = suggestions.map((item, index) => ({
+      ...item,
+      routeCoords: index === 0 ? googleRoute.coords : item.routeCoords,
+      etaMinutes: index === 0 && googleRoute.etaMinutes ? googleRoute.etaMinutes : item.etaMinutes,
+      distanceKm: index === 0 ? googleRoute.distanceKm : undefined,
+      why: index === 0
+        ? ["Uses Google Maps route geometry when the API key is configured.", ...item.why.slice(0, 2)]
+        : item.why
+    }));
+  }
+  await insertRouteHistory({
     id: randomUUID(),
     userId,
     from,
@@ -50,30 +167,15 @@ app.post("/api/route-suggestions", (req: Request, res: Response) => {
     createdAt: new Date().toISOString()
   });
 
-  writeDb(db);
   return res.json({ suggestions });
 });
 
-app.get("/api/mood-trend", (req: Request, res: Response) => {
+app.get("/api/mood-trend", async (req: Request, res: Response) => {
   const moodId = String(req.query.moodId || "calm");
-  const db = readDb();
-  const now = Date.now();
+  const signals = await getRecentMoodSignals(moodId);
 
-  const routes = db.routesHistory
-    .filter((item) => item.moodId === moodId)
-    .filter((item) => now - new Date(item.createdAt).getTime() <= 24 * 60 * 60 * 1000);
-
-  const recentFeedback = db.feedback
-    .filter((item) => item.moodId === moodId)
-    .filter((item) => now - new Date(item.createdAt).getTime() <= 7 * 24 * 60 * 60 * 1000);
-
-  const feedbackAvg =
-    recentFeedback.length > 0
-      ? recentFeedback.reduce((sum, item) => sum + item.rating, 0) / recentFeedback.length
-      : 3.4;
-
-  const routeVolumeBoost = Math.min(12, routes.length * 1.5);
-  const feedbackBoost = (feedbackAvg - 3) * 7;
+  const routeVolumeBoost = Math.min(12, signals.routes24h * 1.5);
+  const feedbackBoost = (signals.avgRating - 3) * 7;
   const baseByMood: Record<string, number> = { calm: 66, happy: 72, focused: 69, energetic: 75, stressed: 45 };
   const base = baseByMood[moodId] ?? 64;
 
@@ -88,92 +190,70 @@ app.get("/api/mood-trend", (req: Request, res: Response) => {
       { hour: "+2h", score: score2 },
       { hour: "+3h", score: score3 }
     ],
-    signals: {
-      routes24h: routes.length,
-      feedback7d: recentFeedback.length,
-      avgRating: Number(feedbackAvg.toFixed(2))
-    }
+    signals: { ...signals, avgRating: Number(signals.avgRating.toFixed(2)) }
   });
 });
 
-app.get("/api/preferences/:userId", (req: Request, res: Response) => {
-  const db = readDb();
-  const preferences: Preference = db.preferences[req.params.userId] || {
-    favoriteMoods: [],
-    defaultTransport: "walking",
-    notificationsEnabled: false
-  };
-
+app.get("/api/preferences/:userId", async (req: Request, res: Response) => {
+  const preferences: Preference = await getPreferences(req.params.userId);
   res.json({ preferences });
 });
 
-app.put("/api/preferences/:userId", (req: Request, res: Response) => {
-  const db = readDb();
-  const current = db.preferences[req.params.userId] || {
-    favoriteMoods: [],
-    defaultTransport: "walking",
-    notificationsEnabled: false
-  };
-
-  db.preferences[req.params.userId] = {
-    ...current,
-    ...(req.body as Partial<Preference>),
-    updatedAt: new Date().toISOString()
-  };
-
-  writeDb(db);
-  res.json({ preferences: db.preferences[req.params.userId] });
+app.put("/api/preferences/:userId", async (req: Request, res: Response) => {
+  const preferences = await upsertPreferences(req.params.userId, req.body as Partial<Preference>);
+  res.json({ preferences });
 });
 
-app.post("/api/feedback", (req: Request, res: Response) => {
-  const { userId = "guest", moodId, rating, comment = "" } = req.body as {
+app.post("/api/feedback", async (req: Request, res: Response) => {
+  const { userId = "guest", moodId, rating, comment = "", routeTitle = "", moodMatch, relaxing, tooCrowded } = req.body as {
     userId?: string;
     moodId?: string;
     rating?: number;
     comment?: string;
+    routeTitle?: string;
+    moodMatch?: boolean;
+    relaxing?: boolean;
+    tooCrowded?: boolean;
   };
 
   if (!moodId || typeof rating !== "number") {
     return res.status(400).json({ error: "moodId and numeric rating are required." });
   }
+  if (!getMoodById(moodId)) {
+    return res.status(400).json({ error: "Unknown moodId." });
+  }
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    return res.status(400).json({ error: "rating must be an integer from 1 to 5." });
+  }
 
-  const db = readDb();
   const entry = {
     id: randomUUID(),
     userId,
     moodId,
     rating,
     comment,
+    routeTitle,
+    moodMatch,
+    relaxing,
+    tooCrowded,
     createdAt: new Date().toISOString()
   };
 
-  db.feedback.push(entry);
-  writeDb(db);
+  await insertFeedback(entry);
   return res.status(201).json({ feedback: entry });
 });
 
-app.get("/api/stats", (_req: Request, res: Response) => {
-  const db = readDb();
+app.get("/api/stats", async (_req: Request, res: Response) => {
+  res.json(await getStats());
+});
 
-  const activeUsers = new Set([
-    ...Object.keys(db.preferences),
-    ...db.routesHistory.map((r) => r.userId),
-    ...db.feedback.map((f) => f.userId)
-  ]).size;
-
-  const moodCounts = db.routesHistory.reduce<Record<string, number>>((acc, route) => {
-    acc[route.moodId] = (acc[route.moodId] || 0) + 1;
-    return acc;
-  }, {});
-
-  res.json({
-    activeUsers,
-    totalFeedback: db.feedback.length,
-    totalRoutesGenerated: db.routesHistory.length,
-    moodCounts
+initializePostgres()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Route Mood backend running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error: unknown) => {
+    console.error("Failed to initialize PostgreSQL", error);
+    process.exit(1);
   });
-});
-
-app.listen(PORT, () => {
-  console.log(`Route Mood backend running on http://localhost:${PORT}`);
-});

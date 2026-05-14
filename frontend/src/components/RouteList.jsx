@@ -14,8 +14,8 @@ function RouteList({ suggestions, activeRoute, currentMood, loading, onSelect })
       <div className="row">
         <h2 id="route-suggestions-title">Suggestions</h2>
         {currentMood && (
-          <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(currentMood.musicKeywords)}`} target="_blank" rel="noreferrer">
-            {currentMood.label} playlist
+          <a href={`https://open.spotify.com/search/${encodeURIComponent(currentMood.musicKeywords)}/playlists`} target="_blank" rel="noreferrer">
+            {currentMood.label} Spotify playlist
           </a>
         )}
       </div>

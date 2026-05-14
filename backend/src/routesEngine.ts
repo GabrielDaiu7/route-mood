@@ -22,6 +22,11 @@ type Suggestion = {
   etaMinutes: number;
   stressScore: number;
   confidence: number;
+  elevationGainM: number;
+  safetyScore: number;
+  noiseLevel: "Low" | "Medium" | "High";
+  distanceKm?: number;
+  why: string[];
   routeCoords: [number, number][];
   streetSteps: {
     title: string;
@@ -180,6 +185,11 @@ function routeCoordsForMood(moodId: string, routeKind: Suggestion["routeKind"]):
       balanced: [[41.333, 19.836], [41.329, 19.828], [41.322, 19.819], [41.313, 19.813]],
       scenic: [[41.336, 19.832], [41.332, 19.824], [41.326, 19.816], [41.319, 19.812], [41.312, 19.809]],
       fastest: [[41.332, 19.834], [41.324, 19.823], [41.315, 19.816]]
+    },
+    romantic: {
+      balanced: [[41.327, 19.816], [41.323, 19.82], [41.319, 19.825], [41.315, 19.828]],
+      scenic: [[41.329, 19.812], [41.326, 19.818], [41.321, 19.824], [41.317, 19.829], [41.313, 19.831]],
+      fastest: [[41.328, 19.817], [41.322, 19.823], [41.316, 19.827]]
     }
   };
 
@@ -402,6 +412,47 @@ function routeVariantsForMood(moodId: string, moodLabel: string, routeStyle: str
           { title: "Arrive via Rruga Aleksander Moisiu", detail: "Complete the route on the final direct stretch.", icon: "arrive" }
         ]
       }
+    ],
+    romantic: [
+      {
+        id: "promenade-romantic",
+        title: "Promenade Romantic Route",
+        description: `A softer route built for ${routeStyle}.`,
+        routeKind: "balanced",
+        confidence: 0.88,
+        tags: ["mood-match", "scenic", "comfort"],
+        streetSteps: [
+          { title: "Start gently from the origin", detail: "Choose a quieter connector and keep the route relaxed.", icon: "start" },
+          { title: "Continue through a scenic corridor", detail: "Follow streets with calmer edges and landmark views.", icon: "straight" },
+          { title: "Arrive near the destination", detail: "Finish with a short, low-pressure approach.", icon: "arrive" }
+        ]
+      },
+      {
+        id: "golden-hour-romantic",
+        title: "Golden Hour Scenic Walk",
+        description: "A scenic option with cozier streets and softer pacing.",
+        routeKind: "scenic",
+        confidence: 0.84,
+        tags: ["scenic", "comfort"],
+        streetSteps: [
+          { title: "Start on the calm side street", detail: "Move toward the scenic middle of the route.", icon: "start" },
+          { title: "Follow the evening corridor", detail: "Stay with the route that favors atmosphere over speed.", icon: "straight" },
+          { title: "Arrive smoothly", detail: "Use the final short connection into the destination.", icon: "arrive" }
+        ]
+      },
+      {
+        id: "sweet-shortcut-romantic",
+        title: "Sweet Shortcut",
+        description: "A shorter route that still avoids harsh noisy sections.",
+        routeKind: "fastest",
+        confidence: 0.79,
+        tags: ["efficient", "low-complexity"],
+        streetSteps: [
+          { title: "Start directly", detail: "Take the cleanest departure line.", icon: "start" },
+          { title: "Continue on the simple connector", detail: "Keep the trip direct while avoiding pressure points.", icon: "straight" },
+          { title: "Arrive", detail: "Finish at the selected destination.", icon: "arrive" }
+        ]
+      }
     ]
   };
 
@@ -467,6 +518,21 @@ export function generateSuggestions({ from, to, moodId, transport, avoid }: Sugg
     scenic: 3,
     fastest: moodId === "focused" ? 4 : 5
   };
+  const elevationByKind: Record<Suggestion["routeKind"], number> = {
+    balanced: 24,
+    scenic: 38,
+    fastest: 18
+  };
+  const safetyByKind: Record<Suggestion["routeKind"], number> = {
+    balanced: 86,
+    scenic: 82,
+    fastest: 76
+  };
+  const noiseByKind: Record<Suggestion["routeKind"], Suggestion["noiseLevel"]> = {
+    balanced: "Medium",
+    scenic: "Low",
+    fastest: moodId === "happy" || moodId === "energetic" ? "High" : "Medium"
+  };
 
   const suggestions: Suggestion[] = routeVariantsForMood(moodId, mood.label, mood.routeStyle).map((variant) => ({
     id: variant.id,
@@ -475,6 +541,14 @@ export function generateSuggestions({ from, to, moodId, transport, avoid }: Sugg
     etaMinutes: durationByKind[variant.routeKind],
     stressScore: stressByKind[variant.routeKind],
     confidence: variant.confidence,
+    elevationGainM: elevationByKind[variant.routeKind],
+    safetyScore: safetyByKind[variant.routeKind],
+    noiseLevel: noiseByKind[variant.routeKind],
+    why: [
+      `${Math.round(variant.confidence * 100)}% match for ${mood.label.toLowerCase()} mood signals.`,
+      variant.routeKind === "scenic" ? "Chooses calmer visual corridors over pure speed." : "Balances directness with emotional comfort.",
+      `Avoids the highest-stress segments for this ${transport || "trip"} profile.`
+    ],
     routeCoords: routeCoordsBetweenPlaces(fromPlace, toPlace, moodId, variant.routeKind),
     streetSteps: streetStepsBetweenPlaces(fromPlace, toPlace, variant),
     routeKind: variant.routeKind,

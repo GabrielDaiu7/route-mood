@@ -16,17 +16,10 @@ const moods: Mood[] = [
   },
   {
     id: "happy",
-    label: "Happy",
+    label: "Happy / Positive",
     color: "#ffd166",
     musicKeywords: "happy upbeat pop",
     routeStyle: "lively streets and landmarks"
-  },
-  {
-    id: "focused",
-    label: "Focused",
-    color: "#8ecae6",
-    musicKeywords: "deep focus ambient",
-    routeStyle: "fast and predictable roads"
   },
   {
     id: "energetic",
@@ -36,9 +29,16 @@ const moods: Mood[] = [
     routeStyle: "active and scenic city roads"
   },
   {
+    id: "romantic",
+    label: "Romantic",
+    color: "#d9468f",
+    musicKeywords: "romantic acoustic chill",
+    routeStyle: "scenic, cozy streets and evening landmarks"
+  },
+  {
     id: "stressed",
     label: "Stressed",
-    color: "#9b5de5",
+    color: "#8ecae6",
     musicKeywords: "meditation anti stress",
     routeStyle: "low-traffic, relaxing roads"
   }

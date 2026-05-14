@@ -628,6 +628,123 @@
       "moodId": "stressed",
       "transport": "walking",
       "createdAt": "2026-05-07T17:09:41.550Z"
+    },
+    {
+      "id": "436e4341-af61-4675-b47e-8f72317c0162",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Pazari i Ri, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:26:31.576Z"
+    },
+    {
+      "id": "f938d2ef-f45d-43d4-a8cf-38b52349e8b4",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "stressed",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:26:35.218Z"
+    },
+    {
+      "id": "1d7bf41d-fd6f-402d-bb0f-fd0cc5596248",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "calm",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:27:08.935Z"
+    },
+    {
+      "id": "2c0fcc3d-4271-4f42-b4c6-1c4a6a7d1694",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "happy",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:27:09.630Z"
+    },
+    {
+      "id": "95443b43-3084-49ec-9e45-79c906cbce5f",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "focused",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:27:12.213Z"
+    },
+    {
+      "id": "65e8a5c4-b0f6-409e-b9c4-dd35b9e21024",
+      "userId": "website-demo",
+      "from": "Blloku, Tirana",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:27:13.553Z"
+    },
+    {
+      "id": "48a54304-25b3-49d4-bec4-e9c28032b7a1",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:27:27.581Z"
+    },
+    {
+      "id": "96cdc0ea-58c8-4ec9-a316-9928ee3fef6b",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:30:52.044Z"
+    },
+    {
+      "id": "21fb0ad6-8470-4fdb-ad0e-2c2923857d2d",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:31:35.769Z"
+    },
+    {
+      "id": "fb600807-c015-4f5e-bb75-41205a5170fa",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:32:38.074Z"
+    },
+    {
+      "id": "0df4b9f6-1ffd-462c-b8aa-090d546d8fe0",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "energetic",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:33:02.676Z"
+    },
+    {
+      "id": "f4713da0-d5a5-46be-9667-13c6cd5263a2",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "happy",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:33:21.374Z"
+    },
+    {
+      "id": "c306ebd7-1e43-4404-9ed9-3200e599002b",
+      "userId": "website-demo",
+      "from": "41.30581, 19.83421",
+      "to": "Toptani Shopping Center, Tirana",
+      "moodId": "happy",
+      "transport": "walking",
+      "createdAt": "2026-05-08T09:35:32.344Z"
     }
   ]
 }
